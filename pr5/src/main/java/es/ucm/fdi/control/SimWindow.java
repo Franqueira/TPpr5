@@ -7,15 +7,27 @@ import java.io.*;
 import java.util.*;
 
 import javax.swing.*;
-import javax.swing.border.TitledBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import es.ucm.fdi.control.TrafficSimulator.*;
+import es.ucm.fdi.model.TrafficSimulator;
+import es.ucm.fdi.model.TrafficSimulator.*;
 import es.ucm.fdi.model.events.Event;
 import es.ucm.fdi.model.simobject.*;
 import es.ucm.fdi.view.*;
 
 @SuppressWarnings("serial")
+/**
+ * 
+ * Ventana principal de la interfaz gráfica del programa. Responsabilidades:
+ * Mostrar todos los paneles divididos así como crear todas las acciones,las tablas y 
+ * editores de texto llamando a otras clases. 
+ * Crear el menú y la barra de tareas con las acciones creadas.
+ * Mantener todo el contenido que tiene en su interior actualizado, para ello tiene un listener.
+ * @see TrafficSimulator
+ * 
+ * @author Miguel Franqueira Varela
+ *
+ */
 public class SimWindow extends JFrame {
 	private Controller control;
 	private TrafficSimulator simulator; // no es necesario
@@ -25,7 +37,7 @@ public class SimWindow extends JFrame {
 	private SimulationListener listener;
 
 	private GUITextArea eventsEditor;
-	private GUITable eventsQueue;
+	private GUITable<Event> eventsQueue;
 	private GUITextArea reportsArea;
 	private GUITable vehiclesTable;
 	private GUITable roadsTable;
@@ -41,11 +53,13 @@ public class SimWindow extends JFrame {
 	private List<SimObject> filter;
 	private static final Dimension ROADMAP_SIZE = new Dimension(100, 100);
 
-	public SimWindow(Controller c, File file) throws IOException {
+	public SimWindow(Controller c, String file){
 		super("Traffic Simulator");
 		setSize(1000, 700);
 		control = c;
-		this.file = file;
+		if(file!=null){
+			this.file = new File(file);
+		}
 		// lo tengo como atributo simplemente para simplificar futuro código
 		simulator = control.getSimulator();
 		listener = new SimulationListener();
@@ -58,10 +72,10 @@ public class SimWindow extends JFrame {
 		addPanels();
 		if (file != null) {
 			try {
-				eventsEditor.readFile(file);
+				eventsEditor.readFile(this.file);
 			} catch (Exception e) {
 				showErrorMessage("Failure reading the file"
-						+ file.getAbsolutePath());
+						+ this.file.getAbsolutePath());
 			}
 		}
 	}
@@ -71,17 +85,20 @@ public class SimWindow extends JFrame {
 		chooser = new JFileChooser();
 		chooser.setFileFilter(new FileNameExtensionFilter("INI files", "ini"));
 		chooser.setCurrentDirectory(new File("src/test/resources/examples/"));
-		filter=new ArrayList<>();
+		filter = new ArrayList<>();
 		JTextArea area = new JTextArea("");
-		SimulatorAction[] acts = new SimulatorAction[3];
+		SimulatorAction[] acts = new SimulatorAction[4];
 		acts[0] = actions.get(Command.Clear);
 		acts[1] = actions.get(Command.Open);
 		acts[2] = actions.get(Command.Save);
-		try{
-		eventsEditor = new GUITextArea(true, "Events", new JTextArea(""), acts);
-		reportsArea = new GUITextArea(false, "Reports", area, acts);
-		} catch(IOException e){
-			showErrorMessage("Failing creating Events or Reports area:\n"+e.getMessage());
+		acts[3] = actions.get(Command.Filter);
+		try {
+			eventsEditor = new GUITextArea(true, "Events", new JTextArea(""),
+					acts);
+			reportsArea = new GUITextArea(false, "Reports", area, acts);
+		} catch (IOException e) {
+			showErrorMessage("Failing creating Events or Reports area:\n"
+					+ e.getMessage());
 		}
 		addEventsQueue();
 		addVehiclesTable();
@@ -96,7 +113,7 @@ public class SimWindow extends JFrame {
 	private void addEventsQueue() {
 		String[] rows = { "#", "Time", "Type" };
 		List<Event> events = new ArrayList<>();
-		eventsQueue = new GUITable(rows, events);
+		eventsQueue = new GUITable<>(rows, events);
 		eventsQueue.setBorder("Events Queue");
 	}
 
@@ -104,7 +121,7 @@ public class SimWindow extends JFrame {
 		String[] rows = { "ID", "Road", "Location", "Speed", "Km",
 				"Faulty Units", "Itinerary" };
 		List<Vehicle> vehiculos = new ArrayList<>();
-		vehiclesTable = new GUITable(rows, vehiculos);
+		vehiclesTable = new GUITable<>(rows, vehiculos);
 		vehiclesTable.setBorder("Vehicles");
 	}
 
@@ -112,14 +129,14 @@ public class SimWindow extends JFrame {
 		String[] rows = { "ID", "Source", "Target", "Length", "Max Speed",
 				"Vehicles" };
 		List<Road> roads = new ArrayList<>();
-		roadsTable = new GUITable(rows, roads);
+		roadsTable = new GUITable<>(rows, roads);
 		roadsTable.setBorder("Roads");
 	}
 
 	private void addJunctionsTable() {
 		String[] rows = { "ID", "Green", "Red" };
 		List<Junction> junctions = new ArrayList<>();
-		junctionsTable = new GUITable(rows, junctions);
+		junctionsTable = new GUITable<>(rows, junctions);
 		junctionsTable.setBorder("Junctions");
 	}
 
@@ -138,9 +155,9 @@ public class SimWindow extends JFrame {
 		bar.add(actions.get(Command.Open));
 		bar.add(actions.get(Command.Save));
 		bar.add(actions.get(Command.Clear));
-		
+
 		bar.addSeparator();
-		
+
 		bar.add(actions.get(Command.Events));
 		bar.add(actions.get(Command.Play));
 		bar.add(actions.get(Command.Reset));
@@ -149,9 +166,9 @@ public class SimWindow extends JFrame {
 		add(bar, BorderLayout.NORTH);
 		bar.add(new JLabel("Time: "));
 		bar.add(time);
-		
+
 		bar.addSeparator();
-		
+
 		bar.add(actions.get(Command.Report));
 		bar.add(actions.get(Command.Filter));
 		bar.add(actions.get(Command.Delete_Report));
@@ -179,6 +196,7 @@ public class SimWindow extends JFrame {
 		simulator.add(actions.get(Command.Reset));
 		simulator.add(redirectOutput);
 		reports.add(actions.get(Command.Report));
+		reports.add(actions.get(Command.Filter));
 		reports.add(actions.get(Command.Delete_Report));
 		JMenuBar menu = new JMenuBar();
 		menu.add(file);
@@ -201,7 +219,7 @@ public class SimWindow extends JFrame {
 				"control shift L", () -> clearEvents()));
 		actions.put(Command.Events, new SimulatorAction(Command.Events,
 				"events.png", "Muestra los eventos", KeyEvent.VK_E,
-				"control shift E", () -> showEvents()));
+				"control shift E", () -> putEventsOnTable()));
 		actions.put(Command.Play, new SimulatorAction(Command.Play, "play.png",
 				"Avanza la simulación", KeyEvent.VK_P, "control shift P",
 				() -> play()));
@@ -313,31 +331,35 @@ public class SimWindow extends JFrame {
 	}
 
 	protected void loadEvent() {
-		chooser.showOpenDialog(getParent());
-		file = chooser.getSelectedFile();
-		if (file != null && file.canRead()) {
-			try {
-				eventsEditor.readFile(file);
-			} catch (Exception e) {
-				showErrorMessage("Failure reading events in the file"
-						+ file.getAbsolutePath());
+		int valid = chooser.showOpenDialog(getParent());
+		if (valid == JFileChooser.APPROVE_OPTION) {
+			file = chooser.getSelectedFile();
+			if (file != null && file.canRead()) {
+				try {
+					eventsEditor.readFile(file);
+				} catch (Exception e) {
+					showErrorMessage("Failure reading events in the file:\n"
+							+ file.getAbsolutePath());
+				}
+				actions.get(Command.Clear).setEnabled(true);
 			}
-			actions.get(Command.Clear).setEnabled(true);
 		}
 	}
 
 	protected void saveEvent() {
-		chooser.showSaveDialog(getParent());
-		file = chooser.getSelectedFile();
+		int valid = chooser.showSaveDialog(getParent());
+		if (valid == JFileChooser.APPROVE_OPTION) {
+			file = chooser.getSelectedFile();
 
-		try {
-			FileOutputStream output;
-			output = new FileOutputStream(file);
-			output.write(eventsEditor.getText().getBytes());
-		} catch (Exception e) {
-			showErrorMessage("Failure writing events in the file"
-					+ file.getAbsolutePath());
+			try {
+				FileOutputStream output;
+				output = new FileOutputStream(file);
+				output.write(eventsEditor.getText().getBytes());
+			} catch (Exception e) {
+				showErrorMessage("Failure writing events in the file:\n"
+						+ file.getAbsolutePath());
 
+			}
 		}
 	}
 
@@ -346,12 +368,14 @@ public class SimWindow extends JFrame {
 		actions.get(Command.Clear).setEnabled(false);
 	}
 
-	protected void showEvents() {
+	protected void putEventsOnTable() {
 		control.setIn(eventsEditor.getFileTextInputStream());
 		try {
 			control.loadEvents();
 		} catch (Exception e) {
-			showErrorMessage(e.getMessage());
+			showErrorMessage("Error loading events from eventsEditor. "
+					+ "It is probably because of the file:\n"
+					+ file.getAbsolutePath() + "\n" + e.getMessage());
 		}
 		eventsEditor.clear();
 		actions.get(Command.Play).setEnabled(true);
@@ -374,6 +398,10 @@ public class SimWindow extends JFrame {
 	}
 
 	protected void report() {
+		/*
+		 * solo genera los del tiempo asociado. si se quiere que se generen en
+		 * cada ciclo del tiempo hay que activar el redirectOutput
+		 */
 		simulator.generateReport(out);
 		actions.get(Command.Delete_Report).setEnabled(true);
 	}
@@ -382,31 +410,35 @@ public class SimWindow extends JFrame {
 		reportsArea.clear();
 		actions.get(Command.Delete_Report).setEnabled(false);
 	}
-	protected void filter(){
+
+	protected void filter() {
 		filter.clear();
-		List<Junction> junctions=junctionsTable.getSelectedObjects();
-		for(Junction c:junctions){
+		List<Junction> junctions = junctionsTable.getSelectedObjects();
+		for (Junction c : junctions) {
 			filter.add(c);
 		}
-		List<Road> roads=roadsTable.getSelectedObjects();
-		for(Road c:roads){
+		List<Road> roads = roadsTable.getSelectedObjects();
+		for (Road c : roads) {
 			filter.add(c);
 		}
-		List<Vehicle> vehicles=vehiclesTable.getSelectedObjects();
-		for(Vehicle c:vehicles){
+		List<Vehicle> vehicles = vehiclesTable.getSelectedObjects();
+		for (Vehicle c : vehicles) {
 			filter.add(c);
 		}
 		simulator.setFilter(filter);
-		
+
 	}
+
 	protected void saveReport() {
-		chooser.showSaveDialog(getParent());
-		file = chooser.getSelectedFile();
-		try (FileOutputStream output = new FileOutputStream(file)) {
-			output.write(reportsArea.getText().getBytes());
-		} catch (IOException e) {
-			showErrorMessage("Failure writing reports in the file"
-					+ file.getAbsolutePath());
+		int valid = chooser.showSaveDialog(getParent());
+		if (valid == JFileChooser.APPROVE_OPTION) {
+			file = chooser.getSelectedFile();
+			try (FileOutputStream output = new FileOutputStream(file)) {
+				output.write(reportsArea.getText().getBytes());
+			} catch (IOException e) {
+				showErrorMessage("Failure writing reports in the file:\n"
+						+ file.getAbsolutePath());
+			}
 		}
 	}
 }

@@ -3,8 +3,17 @@ package es.ucm.fdi.model.simobject;
 import java.util.List;
 import java.util.Map;
 
-import es.ucm.fdi.view.Describable;
-/**Vehículo*/
+import es.ucm.fdi.model.Describable;
+/**
+ * Vehículo
+ * Responsabilidades:
+ * Se encarga de avanzar en la carretera en la que se encuentra y seguir un itinerario de cruces
+ * hasta llegar a su destino.
+ * 
+ * 
+ * @author Miguel Franqueira Varela
+ * 
+  */
 public class Vehicle extends SimObject implements Describable{
 	protected int maxSpeed;
 	protected int realSpeed;
@@ -64,7 +73,6 @@ public class Vehicle extends SimObject implements Describable{
 			realSpeed = vel;
 		}
 	}
-	/**Avanza en la carretera actual a la velocidad que tiene como atributo*/
 	public void advance() {
 		if (faultyTime > 0) {
 			faultyTime--;
@@ -81,7 +89,6 @@ public class Vehicle extends SimObject implements Describable{
 			}
 		}
 	}
-	/**Cambia de carretera al vehículo*/
 	public void moveToNextRoad(Road r) {
 		r.newVehicleR(this);
 		nextJunction++;
@@ -97,7 +104,6 @@ public class Vehicle extends SimObject implements Describable{
 	public void arrived() {
 		isArrived = true;
 	}
-	/**Guarda sus atributos en el mapa pasado como argumento*/
 	protected void fillReportDetails(Map<String, String> out) {
 		out.put("speed", "" + realSpeed);
 		out.put("kilometrage", "" + kilometrage);

@@ -7,6 +7,12 @@ import es.ucm.fdi.model.RoadMap;
 import es.ucm.fdi.model.simobject.Junction;
 import es.ucm.fdi.model.simobject.Road;
 
+/**
+ * Crea una nueva carretera
+ * 
+ * @author Miguel Franqueira Varela
+ *
+ */
 public class NewRoadEvent extends Event {
 
 	protected String id;

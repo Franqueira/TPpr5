@@ -8,6 +8,7 @@ import java.util.Map;
 
 import es.ucm.fdi.ini.Ini;
 import es.ucm.fdi.ini.IniSection;
+import es.ucm.fdi.model.TrafficSimulator;
 import es.ucm.fdi.model.events.Event;
 import es.ucm.fdi.model.events.MakeVehicleFaultyEvent;
 import es.ucm.fdi.model.events.NewBikeEvent;
@@ -19,6 +20,18 @@ import es.ucm.fdi.model.events.NewMostCrowedEvent;
 import es.ucm.fdi.model.events.NewRoadEvent;
 import es.ucm.fdi.model.events.NewRoundRobinEvent;
 import es.ucm.fdi.model.events.NewVehicleEvent;
+
+/**
+ * 
+ * Controla el simulador, para ello guarda la entrada, la salida, el número de
+ * ticks a ejecutar y el simulador. Responsabilidades:
+ * Llamar al método run del simulador pasándole la salida.
+ * Cargar los eventos desde el fichero de entrada.
+ * 
+ * @see TrafficSimulator
+ * @author Miguel Franqueira Varela
+ *
+ */
 
 public class Controller {
 	private static Event.Builder[] avaliableEvents = {
@@ -40,13 +53,15 @@ public class Controller {
 		this.ticks = ticks;
 		this.simulator = new TrafficSimulator();
 	}
-	
+
 	protected OutputStream getOut() {
 		return this.out;
 	}
-	protected void setOut(OutputStream out){
-		this.out=out;
+
+	protected void setOut(OutputStream out) {
+		this.out = out;
 	}
+
 	protected void setIn(InputStream in) {
 		this.in = in;
 	}
@@ -64,28 +79,29 @@ public class Controller {
 	}
 
 	public void loadEvents() throws IOException {
-		//try{
+		
 		Ini init = new Ini(in);
 		List<IniSection> list = init.getSections();
 
 		for (IniSection i : list) {
-			try{
-			boolean found = false;
-			Map<String, String> map = i.getKeysMap();
-			for (Event.Builder b : avaliableEvents) {
-				if (b.canParse(i.getTag(), map.getOrDefault("type", ""))) {
-					simulator.addEvent(b.parse(map));
-					found = true;
-					break;
+			try {
+				boolean found = false;
+				Map<String, String> map = i.getKeysMap();
+				for (Event.Builder b : avaliableEvents) {
+					if (b.canParse(i.getTag(), map.getOrDefault("type", ""))) {
+						simulator.addEvent(b.parse(map));
+						found = true;
+						break;
+					}
 				}
-
-			}
-			if (!found) {
-				throw new IllegalArgumentException(
-						"Not sure about what is this: " + i.getTag());
-			}
-			} catch(Exception e){
-				throw new IllegalArgumentException("ERROR in the inisection:\n"+i.toString()+'\n'+e.getMessage());			
+				
+				if (!found) {
+					throw new IllegalArgumentException(
+							"Not sure about what is this: " + i.getTag());
+				}
+			} catch (Exception e) {
+				throw new IllegalArgumentException("ERROR in the inisection:\n"
+						+ i.toString() + "\n" + e.getMessage());
 			}
 
 		}

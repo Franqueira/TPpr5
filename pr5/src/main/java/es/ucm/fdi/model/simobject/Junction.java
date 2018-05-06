@@ -7,8 +7,19 @@ import java.util.List;
 import java.util.Map;
 
 import es.ucm.fdi.exceptions.SimulatorException;
-import es.ucm.fdi.view.Describable;
+import es.ucm.fdi.model.Describable;
 
+/**
+ * Cruce general. Responsabilidades:
+ * Hacer que los vehículos que provienen de diferentes carreteras que están
+ * conectadas a este cruce circulen a su siguiente carretera atendiendo a 
+ * un orden, de manera que solo el coche de unas de las carreteras puede
+ * avanzar a la vez.
+ * 
+ * 
+ * @author Miguel Franqueira Varela
+ *
+ */
 public class Junction extends SimObject implements Describable {
 	protected Map<Road, IncomingRoad> knowIncomings;
 	protected List<IncomingRoad> incomings;
@@ -22,23 +33,22 @@ public class Junction extends SimObject implements Describable {
 		trafficLight = 0;
 		knowOutgoing = new HashMap<>();
 	}
-	/**Inserta el vehículo pasado como argumento en el cruce*/
 	public void addVehicle(Vehicle vehicle) {
 		knowIncomings.get(vehicle.getRoad()).queue.add(vehicle);
 	}
-	/**Añade la carretera pasada como argumento a la lista de carreteras salientes*/
 	public void addOutgoing(Road road) {
 		knowOutgoing.put(road.getEndJunction(), road);
 	}
-	/**Añade la carretera pasada como argumento a la lista de carreteras entrantes*/
+	public boolean isTrafficLightGreen(Road r){
+		return knowIncomings.get(r).isTrafficLightGreen;
+	}
 	public void addIncoming(Road road) {
 		IncomingRoad incRoad = new IncomingRoad(road.getId());
 		knowIncomings.put(road, incRoad);
 		incomings.add(incRoad);
 		trafficLight = incomings.size()-1;
 	}
-	/**Método que se encarga de mover el vehículo pasado como argumento a sus siguiente carretera.
-	 * Si no hay, se encarga de avisar al coche de que ha llegado*/
+	
 	public void moveVehicleToNextRoad(Vehicle vehicle) {
 		Junction nextJunction = vehicle.getNextJunction();
 		if (nextJunction != null) {
@@ -51,7 +61,6 @@ public class Junction extends SimObject implements Describable {
 			vehicle.arrived();
 		}
 	}
-	/**Método que hace avanzar al coche que este en la carretera con semáforo en verde y que el semáforo pase a estar en verde en la siguiente carretera*/
 	public void advance() {
 		if (!incomings.isEmpty()) {
 			IncomingRoad roadGreen = incomings.get(trafficLight);
@@ -64,7 +73,6 @@ public class Junction extends SimObject implements Describable {
 			advanceTrafficLight();
 		}
 	}
-	/**Pone el semáforo que está en verde a rojo y pone en verde el de la siguiente carretera por orden de inserción*/
 	protected void advanceTrafficLight(){
 		IncomingRoad roadGreen = incomings.get(trafficLight);
 		roadGreen.isTrafficLightGreen = false;
@@ -74,7 +82,6 @@ public class Junction extends SimObject implements Describable {
 		}
 		incomings.get(trafficLight).isTrafficLightGreen = true;
 	}
-	/**Se encarga de guardar todos los datos del cruce en el mapa pasado como argumento*/
 	protected void fillReportDetails(Map<String, String> out) {
 		StringBuilder reportJunct = new StringBuilder();
 		incomings.forEach(r -> reportJunct.append(r.generateReport() + ","));
@@ -89,7 +96,13 @@ public class Junction extends SimObject implements Describable {
 	protected String getReportHeader() {
 		return "junction_report";
 	}
-
+	/**
+	 * Clase interna del simulador que representa una carretera de entrada.
+	 * Guarda los coches del final de la carretera y el correspondiente semáforo.
+	 * 
+	 * @author Miguel Franqueira Varela
+	 *
+	 */
 	protected class IncomingRoad {
 		protected ArrayDeque<Vehicle> queue;
 		protected String id;

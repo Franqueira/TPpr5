@@ -9,6 +9,12 @@ import es.ucm.fdi.model.RoadMap;
 import es.ucm.fdi.model.simobject.Junction;
 import es.ucm.fdi.model.simobject.Vehicle;
 
+/**
+ * Crea un nuevo vehículo
+ * 
+ * @author Miguel Franqueira Varela
+ *
+ */
 public class NewVehicleEvent extends Event {
 
 	protected String id;

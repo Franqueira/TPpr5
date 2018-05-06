@@ -3,7 +3,13 @@ package es.ucm.fdi.model.simobject;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-/**Vehículo que se puede averiar con una cierta probabilidad*/
+
+/**
+ * Vehículo que se puede averiar con una cierta probabilidad.
+ * 
+ * @author Miguel Franqueira Varela
+ * 
+ */
 public class Car extends Vehicle {
 
 	protected String type;
@@ -48,7 +54,6 @@ public class Car extends Vehicle {
 			}
 		}
 	}
-	/**Añade los datos de la bici al mapa pasado como argumento*/
 	public void fillReportDetails(Map<String, String> out) {
 		out.put("type", type);
 		super.fillReportDetails(out);

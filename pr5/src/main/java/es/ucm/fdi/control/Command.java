@@ -1,5 +1,13 @@
 package es.ucm.fdi.control;
 
+/**
+ * 
+ * Enumerado con los tipos de acciones posibles.
+ * Su única funcionalidad es guardar esos tipos y devolver el texto asociado.
+ * 
+ * @author Miguel Franqueira Varela
+ *
+ */
 public enum Command {
 	
 	Exit("Exit"),

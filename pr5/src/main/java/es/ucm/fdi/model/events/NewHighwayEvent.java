@@ -8,6 +8,12 @@ import es.ucm.fdi.model.simobject.Highway;
 import es.ucm.fdi.model.simobject.Junction;
 import es.ucm.fdi.model.simobject.Road;
 
+/**
+ * Crea una nueva autopista.
+ * 
+ * @author Miguel Franqueira Varela
+ *
+ */
 public class NewHighwayEvent extends NewRoadEvent {
 
 	protected int lanes;

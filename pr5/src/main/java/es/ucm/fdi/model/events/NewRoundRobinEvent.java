@@ -6,6 +6,12 @@ import es.ucm.fdi.exceptions.SimulatorException;
 import es.ucm.fdi.model.RoadMap;
 import es.ucm.fdi.model.simobject.RoundRobin;
 
+/**
+ * Crea un nuevo cruce circular
+ * 
+ * @author Miguel Franqueira Varela
+ *
+ */
 public class NewRoundRobinEvent extends NewJunctionEvent {
 	
 	protected int minTime;

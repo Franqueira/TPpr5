@@ -4,7 +4,11 @@ import java.util.Map;
 
 import es.ucm.fdi.util.MultiTreeMap;
 /**Tipo de vehículo con varios carriles para soportar un nivel de tráfico mayor que
-las carreteras convencionales.*/
+ * las carreteras convencionales.
+ * 
+ * @author Miguel Franqueira Varela
+ * 
+ */
 public class Highway extends Road {
 	
 	protected String type;
@@ -15,7 +19,6 @@ public class Highway extends Road {
 		this.type = type;
 		this.numLanes = numLanes;
 	}
-	/**Calcula la velocidad base en la autopista*/
 	public int calculateBaseSpeed() {
 		long n = vehicles.sizeOfValues();
 		if (n < 1){
@@ -29,7 +32,6 @@ public class Highway extends Road {
 			return value;
 		}
 	}
-	/**Se encarga de que los vehículos de su carretera avancen a la velocidad apropiada*/
 	public void advance() {
 		MultiTreeMap<Integer, Vehicle> news = new MultiTreeMap<>((a, b) -> b-a);
 		int baseSpeed = calculateBaseSpeed();

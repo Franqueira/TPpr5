@@ -6,6 +6,12 @@ import es.ucm.fdi.exceptions.SimulatorException;
 import es.ucm.fdi.model.RoadMap;
 import es.ucm.fdi.model.simobject.Junction;
 
+/**
+ * Crea un nuevo cruce.
+ * 
+ * @author Miguel Franqueira Varela
+ *
+ */
 public class NewJunctionEvent extends Event {
 
 	protected String id;

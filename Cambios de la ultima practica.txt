@@ -1,0 +1,8 @@
+-He cambiado los nombres de todos los atributos y métodos que estaban en español para que todo estuviese en inglés.
+-He puesto todas las llaves de los if y for para tener un mejor estilo de diseño.
+-Cambiado el método avanza de car para que funcione con todos los ficheros.
+-Cambiados nombres de métodos como newOutgoing a addOutgoing para que se viese mejor lo que hacían.
+-Utilización del operador ternario en semaforoReport
+-Cambiado todo el manejo de excepciones para mostrar mejor los errores y hacer más sencilla la depuración.
+-En RoadMap ahora ya no creo la lista auxiliar antes de cada foreach.
+-Cambiada SimulatorException sobrecargando los constructores que aceptan Throwable

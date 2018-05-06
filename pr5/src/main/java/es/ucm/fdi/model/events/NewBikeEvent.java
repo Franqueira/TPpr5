@@ -10,6 +10,13 @@ import es.ucm.fdi.model.simobject.Bike;
 import es.ucm.fdi.model.simobject.Junction;
 import es.ucm.fdi.model.simobject.Vehicle;
 
+/**
+ * 
+ * Crea una bici y la añade al RoadMap.
+ * 
+ * @author Miguel Franqueira Varela
+ *
+ */
 public class NewBikeEvent extends NewVehicleEvent {
 
 	public NewBikeEvent(int time, String id, int maxSpeed,

@@ -3,8 +3,16 @@ package es.ucm.fdi.model.simobject;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import es.ucm.fdi.view.Describable;
-/**Superclase que engloba todos los objetos de la simulación*/
+import es.ucm.fdi.model.Describable;
+/**
+ * Superclase que engloba todos los objetos de la simulación
+ * Responsabilidades comunes a todos:
+ * Generar y rellenar un mapa en el que se guardan todos los datos propios del objeto de simulación.
+ * 
+ * @see Describable
+ * @author Miguel Franqueira Varela
+ * 
+ */
 public abstract class SimObject implements Describable{
 	protected String id;
 

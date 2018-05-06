@@ -6,6 +6,13 @@ import es.ucm.fdi.exceptions.SimulatorException;
 import es.ucm.fdi.model.RoadMap;
 import es.ucm.fdi.model.simobject.Vehicle;
 
+/**
+ * 
+ * Hace fallar los vehículos que tiene guardados como atributo (tiene guardado un string con las ids).
+ * 
+ * @author Miguel Franqueira Varela
+ *
+ */
 public class MakeVehicleFaultyEvent extends Event {
 	
 	protected int tiempoAveria;

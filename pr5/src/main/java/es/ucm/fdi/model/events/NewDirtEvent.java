@@ -8,6 +8,12 @@ import es.ucm.fdi.model.simobject.Dirt;
 import es.ucm.fdi.model.simobject.Junction;
 import es.ucm.fdi.model.simobject.Road;
 
+/**
+ * Crea una nueva carretera de tierra
+ * 
+ * @author Miguel Franqueira Varela
+ *
+ */
 public class NewDirtEvent extends NewRoadEvent {
 
 	public NewDirtEvent(int time, String id, int maxSpeed, int length,

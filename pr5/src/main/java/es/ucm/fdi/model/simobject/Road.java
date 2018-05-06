@@ -2,9 +2,17 @@ package es.ucm.fdi.model.simobject;
 
 import java.util.Map;
 
+import es.ucm.fdi.model.Describable;
 import es.ucm.fdi.util.MultiTreeMap;
-import es.ucm.fdi.view.Describable;
-/**Carretera convencional por la que pasan coches. Sale de un cruce y llega a otro*/
+/**
+ * Carretera convencional por la que pasan coches. 
+ * Sale de un cruce y llega a otro. 
+ * Responsabilidades:
+ * Se encarga de hacer circular vehículos en su interior y llevarlos hacia su cruce de destino.
+ * 
+ * @author Miguel Franqueira Varela
+ * 
+ */
 public class Road extends SimObject implements Describable {
 	protected int length;
 	protected int maxSpeed;
@@ -32,15 +40,12 @@ public class Road extends SimObject implements Describable {
 	public int getLength() {
 		return length;
 	}
-	/**Añade un vehículo al principio de la carretera*/
 	public void newVehicleR(Vehicle vehicle) {
 		vehicles.putValue(0, vehicle);
 	}
-	/**Elimina un vehículo que haya salido de la carretera*/
 	public void removeVehicle(Vehicle vehicle) {
 		vehicles.removeValue(length, vehicle);
 	}
-	/**Calcula la velocidad a la que se circula en la carretera*/
 	public int calculateBaseSpeed() {
 		long n = vehicles.sizeOfValues();
 		if (n < 1){
@@ -53,7 +58,6 @@ public class Road extends SimObject implements Describable {
 			return (maxSpeed / (int) n) + 1;
 		}
 	}
-	/**Se encarga de que los vehículos de la carretera avancen a la velocidad adecuada*/
 	public void advance() {
 		MultiTreeMap<Integer, Vehicle> news = new MultiTreeMap<>((a, b) -> b-a);
 		int baseSpeed = calculateBaseSpeed();
@@ -74,7 +78,6 @@ public class Road extends SimObject implements Describable {
 		}
 		vehicles = news;
 	}
-	/**Guarda los atributos de la carretera en el mapa pasado como argumento*/
 	protected void fillReportDetails(Map<String, String> out) {
 		StringBuilder meter = new StringBuilder();
 		for (Vehicle v : vehicles.innerValues()) {

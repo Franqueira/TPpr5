@@ -1,4 +1,4 @@
-package es.ucm.fdi.view;
+package es.ucm.fdi.model;
 
 import java.util.Map;
 

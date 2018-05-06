@@ -2,6 +2,13 @@ package es.ucm.fdi.model.simobject;
 
 import java.util.List;
 import java.util.Map;
+/**
+ * 
+ * Clase que contiene los datos de una bicicleta.
+ * 
+ * @author Miguel Franqueira Varela
+ *
+ */
 public class Bike extends Vehicle {
 
 	protected String type;

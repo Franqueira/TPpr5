@@ -1,8 +1,13 @@
 package es.ucm.fdi.model.simobject;
 
 import java.util.Map;
-/**Cruce en el que la siguiente carretera entrante en poner su semáforo
-en verde es aquella que tiene más vehículos en su cola.*/
+/**
+ * Cruce en el que la siguiente carretera entrante en poner su semáforo
+ * en verde es aquella que tiene más vehículos en su cola.
+ * 
+ * @author Miguel Franqueira Varela
+ * 
+ */
 public class MostCrowed extends Junction {
 	
 	protected String type;
@@ -11,14 +16,12 @@ public class MostCrowed extends Junction {
 		super(id);
 		this.type = type;
 	}
-	/**Añade la carretera pasada como argumento como carretera entrante*/
 	public void addIncoming(Road r) {
 		IncomingRoad ir = new IncomingRoad(r.getId());
 		knowIncomings.put(r, ir);
 		incomings.add(ir);
 		advanceTrafficLight();
 	}
-	/**Se encarga de hacer avanzar al coche de la carretera cuyo semáforo este en verde y actualiza el semáforo*/
 	public void advance() {
 		if (!incomings.isEmpty()) {
 			IncomingRoad roadGreen = (IncomingRoad) incomings.get(trafficLight);
@@ -35,7 +38,6 @@ public class MostCrowed extends Junction {
 			}
 		}
 	}
-	/**Se encarga de avanzar el semáforo y calcular cuantos ticks tiene que permanecer en verde consecuentemente*/
 	protected void advanceTrafficLight(){
 		IncomingRoad roadGreen = (IncomingRoad) incomings.get(trafficLight);
 		roadGreen.isTrafficLightGreen = false;
@@ -55,12 +57,10 @@ public class MostCrowed extends Junction {
 		moreVehicles.timeInterval = Math.max(moreVehicles.queue.size() / 2, 1);
 		moreVehicles.timeUnitsUsed = 0;
 	}
-	/**Guarda los datos de este tipo de rotonda en el mapa pasado como argumento*/
 	protected void fillReportDetails(Map<String, String> out) {
 		super.fillReportDetails(out);
 		out.put("type", type);
 	}
-	/**Carreteras entrantes para cruces congestionados*/
 	protected class IncomingRoad extends Junction.IncomingRoad {
 
 		protected int timeInterval;
@@ -71,7 +71,6 @@ public class MostCrowed extends Junction {
 			this.timeInterval = 0;
 			this.timeUnitsUsed = 0;
 		}
-		/**Metodo que se encarga de devolver una cadena con los datos del semáforo*/
 		protected String trafficLightReport() {
 			StringBuilder r = new StringBuilder();
 			r.append(super.trafficLightReport());

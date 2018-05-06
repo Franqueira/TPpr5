@@ -1,7 +1,12 @@
 package es.ucm.fdi.model.simobject;
 
 import java.util.Map;
-/**Tipo de cruce en el que la duración del semáforo en verde es mayor*/
+/**
+ * Tipo de cruce en el que la duración del semáforo en verde es mayor
+ * 
+ * @author Miguel Franqueira Varela
+ * 
+ */
 public class RoundRobin extends Junction {
 	
 	protected int minTime;

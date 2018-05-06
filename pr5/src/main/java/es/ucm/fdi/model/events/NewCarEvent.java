@@ -10,6 +10,13 @@ import es.ucm.fdi.model.simobject.Car;
 import es.ucm.fdi.model.simobject.Junction;
 import es.ucm.fdi.model.simobject.Vehicle;
 
+/**
+ * 
+ * Crea un nuevo coche.
+ * 
+ * @author Miguel Franqueira Varela
+ *
+ */
 public class NewCarEvent extends NewVehicleEvent {
 
 	protected int resistanceKm;

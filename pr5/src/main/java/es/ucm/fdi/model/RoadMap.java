@@ -4,6 +4,14 @@ import java.util.*;
 
 import es.ucm.fdi.model.simobject.*;
 
+/**
+ * Clase en la que se guarda todos los objetos de simulación.
+ * Se encarga de la gestión de estos objetos de simulación, 
+ * añadiendo o devolviendo el objeto u objetos pedidos.
+ * 
+ * @author Miguel Franqueira Varela
+ *
+ */
 public class RoadMap {
 	private List<Vehicle> vehicles;
 	private List<Road> roads;

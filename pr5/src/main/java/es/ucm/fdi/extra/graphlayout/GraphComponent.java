@@ -10,6 +10,8 @@ import java.util.Map;
 
 import javax.swing.JComponent;
 
+import es.ucm.fdi.model.simobject.Road;
+
 public class GraphComponent extends JComponent {
 
 	private static final long serialVersionUID = 1L;
@@ -50,6 +52,7 @@ public class GraphComponent extends JComponent {
 	 */
 	private Graph _graph;
 
+	private Map<Edge,Road> edgeRoad;
 	/**
 	 * A map to store the location of each node
 	 */
@@ -63,13 +66,16 @@ public class GraphComponent extends JComponent {
 	private int _lastHeight;
 
 	public GraphComponent(Dimension size) {
+		edgeRoad=new HashMap();
 		_nodesPisitions = new HashMap<>();
 		setMinimumSize(size);
 		setPreferredSize(size);
 		_lastWidth = -1;
 		_lastHeight = -1;
 	}
-
+	public void setEdgeRoadMap(Map<Edge,Road> map){
+		edgeRoad=map;
+	}
 	public void paint(Graphics graphics) {
 		Graphics2D g = (Graphics2D) graphics;
 		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -109,7 +115,8 @@ public class GraphComponent extends JComponent {
 			Point p2 = _nodesPisitions.get(e.getTarget().getId());
 
 			// draw the edge
-			Color arrowColor = Math.random() > 0.5 ? Color.RED : Color.GREEN;
+			Road actual=edgeRoad.get(e);
+			Color arrowColor = actual.getEndJunction().isTrafficLightGreen(actual) ? Color.GREEN : Color.RED;
 			drawArrowLine(g, p1.cX, p1.cY, p2.cX, p2.cY, 15, 5, Color.BLACK, arrowColor);
 
 			// draw dots as circles. Dots at the same location are drawn with circles of

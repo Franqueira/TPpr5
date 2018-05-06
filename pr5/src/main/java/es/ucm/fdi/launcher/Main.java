@@ -23,7 +23,14 @@ import es.ucm.fdi.control.Controller;
 import es.ucm.fdi.control.SimWindow;
 import es.ucm.fdi.ini.Ini;
 import es.ucm.fdi.ini.IniError;
-
+/**
+ * 
+ * Clase encargada de lanzar el programa. Para ello lee los valores pasados por consola y
+ * los gestiona dependiendo del tipo de modo (gui o batch).
+ * 
+ * @author Miguel Franqueira Varela
+ *
+ */
 public class Main {
 
 	private final static Integer _timeLimitDefaultValue = 10;
@@ -99,7 +106,8 @@ public class Main {
 		}
 	}
 	private static void parseGuiOption(CommandLine line){
-		if(line.getOptionValue("m").equals("gui")){
+		
+		if(line.getOptionValue("m")!=null && line.getOptionValue("m").equals("gui")){
 			GuiMode=true;
 		}
 		
@@ -178,7 +186,7 @@ public class Main {
 		control.loadEvents();
 		control.run();
 	}
-	private static void startGUIMode() throws IOException, InvocationTargetException, InterruptedException{
+	private static void startGUIMode() throws FileNotFoundException, InvocationTargetException, InterruptedException{
 		if(_timeLimit == null){
 			_timeLimit = _timeLimitDefaultValue;
 		}
@@ -186,12 +194,7 @@ public class Main {
 		Controller control = new Controller(input, null, _timeLimit);
 		SwingUtilities.invokeAndWait(new Runnable() {
 			 public void run() {
-			 try {
-				 File f=(_inFile==null ? null: new File(_inFile));
-				new SimWindow(control,f);
-			} catch (IOException e) { // no hecho aun 
-				e.printStackTrace();
-			}
+				new SimWindow(control,_inFile);
 			 }
 			});
 

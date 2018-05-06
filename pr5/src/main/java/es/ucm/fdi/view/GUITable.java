@@ -8,9 +8,19 @@ import java.util.List;
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
 
+import es.ucm.fdi.model.Describable;
 import es.ucm.fdi.model.simobject.SimObject;
 
 @SuppressWarnings("serial")
+/**
+ * Panel que contiene una tabla en su interior. Responsabilidades;
+ * Se encarga de crear la tabla con su modelo.
+ * Devuelve una lista con los objetos seleccionados en la tabla.
+ * Permite cambiar los elementos guardados en la tabla.
+ * 
+ * @author migue
+ * @param <T>
+ */
 public class GUITable<T extends Describable> extends JPanel{
 	JTable table;
 	String[] fieldNames;
@@ -42,6 +52,12 @@ public class GUITable<T extends Describable> extends JPanel{
 		this.elements=elements;
 		model.fireTableDataChanged();
 	}
+	/**
+	 * Modelo de la tabla que permite devolver el valor requerido guardado en la lista de elementos.
+	 * 
+	 * @author Miguel Franqueira Varela
+	 *
+	 */
 	private class ListOfMapsTableModel extends AbstractTableModel {
 		public String getColumnName(int columnIndex) {
 			return fieldNames[columnIndex];
@@ -62,12 +78,6 @@ public class GUITable<T extends Describable> extends JPanel{
 					""+rowIndex:m.get(fieldNames[columnIndex]));
 			
 		}
-		// ineficiente: ¿puedes mejorarlo?
-		/*public Object getValueAt(int rowIndex, int columnIndex) {
-		return elements.get(rowIndex)
-		.describe(new HashMap<String, String>())
-		.get(fieldNames[columnIndex]);
-		}*/
 
 	}
 }

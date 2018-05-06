@@ -2,9 +2,15 @@ package es.ucm.fdi.model.events;
 
 import java.util.Map;
 
+import es.ucm.fdi.model.Describable;
 import es.ucm.fdi.model.RoadMap;
-import es.ucm.fdi.view.Describable;
-/**Clase abstracta para crear un evento a partir de un mapa*/
+/**
+ * Se encarga de guardar en el RoadMap el resultado de ese evento,
+ * Si es de creación lo añade y si es de fallo modifica los vehículos afectados.
+ * También almacena la interfaz interna Builder.
+ * 
+ * @author Miguel Franqueira Varela
+ * */
 public abstract class Event implements Describable {
 	protected int time;
 
@@ -15,13 +21,22 @@ public abstract class Event implements Describable {
 	public int getTime() {
 		return time;
 	}
-	/**Se encarga de guardar en la simulación el nuevo objeto*/
 	public abstract void execute(RoadMap things);
 
+		/**
+		 * 
+		 * Interfaz interna que se contiene los métodos necesarios
+		 * para crear un evento a partir de la lectura de un mapa.
+		 * Las clases que la implementan crean el evento correspondiente a la clase en la
+		 * que son internas.
+		 * 
+		 * @author Miguel Franqueira Varela
+		 *
+		 */
 	public interface Builder {
 
 		public abstract boolean canParse(String title, String type);
-		/**Devuelve un evento a partir del mapa pasado como argumento*/
+
 		public abstract Event parse(Map<String, String> map);
 
 		default boolean isValidId(String id) {

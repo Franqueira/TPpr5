@@ -6,6 +6,13 @@ import es.ucm.fdi.exceptions.SimulatorException;
 import es.ucm.fdi.model.RoadMap;
 import es.ucm.fdi.model.simobject.MostCrowed;
 
+/**
+ * 
+ * Crea un nuevo cruce congestionado.
+ * 
+ * @author Miguel Franqueira Varela
+ *
+ */
 public class NewMostCrowedEvent extends NewJunctionEvent {
 	
 	public NewMostCrowedEvent(int time, String id) {

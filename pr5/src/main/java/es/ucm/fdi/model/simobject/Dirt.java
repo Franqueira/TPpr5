@@ -3,7 +3,12 @@ package es.ucm.fdi.model.simobject;
 import java.util.Map;
 
 import es.ucm.fdi.util.MultiTreeMap;
-/**Tipo de carretera en la que la velocidad de los vehículos es proporcional al número de vehículos que haya averiados delante*/
+/**Tipo de carretera en la que la velocidad de los vehículos es proporcional 
+ * al número de vehículos que haya averiados delante
+ * 
+ * @author Miguel Franqueira Varela
+ * 
+ */
 public class Dirt extends Road {
 	
 	protected String type;
@@ -16,7 +21,6 @@ public class Dirt extends Road {
 	public int calculateBaseSpeed() {
 		return maxSpeed;
 	}
-	/**Se encarga de hacer avanzar a los vehículos que se encuentren en esta carretera*/
 	public void advance() {
 		MultiTreeMap<Integer, Vehicle> nuevos = new MultiTreeMap<>((a, b) -> b-a);
 		int velocidadBase = calculateBaseSpeed();
@@ -35,7 +39,6 @@ public class Dirt extends Road {
 		}
 		vehicles = nuevos;
 	}
-	/**Añade los datos de la bici al mapa pasado como argumento*/
 	public void fillReportDetails(Map<String, String> out) {
 		out.put("type", type);
 		super.fillReportDetails(out);
